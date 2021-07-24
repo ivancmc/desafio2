@@ -9,8 +9,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Tooltip from '@material-ui/core/Tooltip';
 
-export default function FormDialogProduct() {
+export default function FormDialogProduct(props:any) {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
@@ -40,16 +41,33 @@ export default function FormDialogProduct() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const initialFormState = { id: null, photo: '', name: '', description: '', price: '' }
+	const [ product, setProduct ] = useState(initialFormState)
+
+	function handleInputChange(event: { target: { name: string; value: string; }; }): void {
+    const { name, value } = event.target;
+
+    setProduct({ ...product, [name]: value });
+  }
   
   return (
     <div className={classes.root}>
-      <Fab color="secondary" aria-label="add" className={classes.fab} onClick={handleClickOpen}>
-        <AddIcon />
-      </Fab>
+      <Tooltip title="Adicionar produto" aria-label="add">
+        <Fab color="secondary" aria-label="add" className={classes.fab} onClick={handleClickOpen}>
+          <AddIcon />
+        </Fab>
+      </Tooltip>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Inserir produto</DialogTitle>
         <DialogContent>
-          <form className={classes.root} noValidate autoComplete="off">
+          <form className={classes.root} noValidate autoComplete="off" onSubmit={event => {
+            event.preventDefault()
+            if (!product.photo || !product.name || !product.price) return
+            props.addProduct(product)
+            setProduct(initialFormState)
+            handleClose()
+          }}>
             <TextField
               name="photo"
               variant="outlined"
@@ -58,6 +76,8 @@ export default function FormDialogProduct() {
               id="photo"
               label="Imagem (url)"
               autoFocus
+              value={product.photo}
+              onChange={handleInputChange}
             />
             <TextField
               name="name"
@@ -67,6 +87,8 @@ export default function FormDialogProduct() {
               id="name"
               label="Nome"
               autoFocus
+              value={product.name}
+              onChange={handleInputChange}
             />
             <TextField
               name="description"
@@ -75,6 +97,8 @@ export default function FormDialogProduct() {
               id="description"
               label="Descrição"
               autoFocus
+              value={product.description}
+              onChange={handleInputChange}
             />
             <TextField
               name="price"
@@ -85,6 +109,8 @@ export default function FormDialogProduct() {
               label="Preço"
               type="number"
               autoFocus
+              value={product.price}
+              onChange={handleInputChange}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -96,7 +122,13 @@ export default function FormDialogProduct() {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={event => {
+            event.preventDefault()
+            if (!product.photo || !product.name || !product.price) return
+            props.addProduct(product)
+            setProduct(initialFormState)
+            handleClose()
+          }} color="primary">
             Salvar
           </Button>
         </DialogActions>
