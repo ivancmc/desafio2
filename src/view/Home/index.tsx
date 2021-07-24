@@ -4,6 +4,8 @@ import { Container } from './style';
 
 import { store } from '../../store.js';
 
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import FloatingAddProductButton from '../../components/formDialogProduct';
 import Header from '../../components/header';
 
@@ -39,6 +41,18 @@ const Home: React.FC = () => {
     localStorage.setItem('store', JSON.stringify([ ...products, product ]))
   }
 
+  const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+      root: {
+        '& > *': {
+          margin: theme.spacing(1),
+        },
+      },
+    }),
+  );
+
+  const classes = useStyles();
+
   return(
     <>
       <Header cart={cart} />
@@ -49,8 +63,11 @@ const Home: React.FC = () => {
               <img src={prod.photo} alt="Imagem do produto" width="200" height="auto" />
               <h4>{prod.name}</h4>
               <span>{prod.description}</span>
-              <h6>{prod.price}</h6>
-              <button onClick={ () => handleCart(index)}> Adicionar ao carrinho</button>
+              <h5>R$ {prod.price}</h5>
+              {/* <button onClick={ () => handleCart(index)}> Adicionar ao carrinho</button> */}
+              <div className={classes.root} onClick={ () => handleCart(index)}>
+                <Button variant="contained">Adicionar ao carrinho</Button>
+              </div>
             </div>
           ))}
         </section>
