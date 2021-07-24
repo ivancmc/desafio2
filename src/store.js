@@ -22,7 +22,7 @@ export const store = [
   },
   {
     "id": 4,
-    "photo": "https://cdn.leroymerlin.com.br/products/robo_aspirador_de_po_inteligente_roomba%C2%AE_i7__irobot___220v_1567189880_3b2f_600x600.jpg",
+    "photo": "https://i.zst.com.br/thumbs/12/2c/17/1255018394.jpg",
     "name":"iRobot Roomba i7",
     "description": "Descrição do produto",
     "price": 7299
