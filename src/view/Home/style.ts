@@ -35,10 +35,11 @@ export const Container = styled.div`
   }
 
   section {
-    height: 100vh;
+    height: auto;
     width: 100%;
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
 
     .product-content{
       display: grid;

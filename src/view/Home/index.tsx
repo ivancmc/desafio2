@@ -6,33 +6,33 @@ import Cart from '../../assets/cart.png'
 
 import { Container } from './style';
 
-import api from '../../services/api';
+import { store } from '../../store.js';
 
 interface IProduct{
   id: number;
   photo: string;
   name: string;
-  description: string;
+  description?: string;
   price: number;
 }
 
-
 const Home: React.FC = () => {
   const [ products, setProducts ] = useState<IProduct[]>([]);
-  const [ cart, setCart ] = useState<IProduct[]>([]);
+  const [ cart, setCart ] = useState<IProduct[]>(JSON.parse(localStorage.getItem('cart') || '[]'));
   
-
   useEffect(() =>{
-    api.get('').then(
-      response => {
-        setProducts(response.data)
-      }
-    )
-  }, [cart])
+    if (localStorage.getItem('store') === null){
+      setProducts(store)
+    } else {
+      setProducts(JSON.parse(localStorage.getItem('store') || '[]'))
+    }
+  },[])
 
   const handleCart = (index: number) => {
     setCart([ ...cart, products[index] ])
+    setProducts([ ...products, products[index] ])
     localStorage.setItem('cart', JSON.stringify([ ...cart, products[index] ]))
+    localStorage.setItem('store', JSON.stringify([ ...products, products[index] ]))
   }
 
   return(
