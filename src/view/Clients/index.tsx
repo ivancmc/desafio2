@@ -1,4 +1,4 @@
-import React, { useState,  } from 'react';
+import React, { useState, useEffect } from 'react';
 import AddClientForm from './AddClientForm';
 import EditClientForm from './EditClientForm';
 import ClientTable from './ClientTable';
@@ -20,21 +20,33 @@ export default function Clients(props){
 	const [ currentClient, setCurrentClient ] = useState(initialFormState)
 	const [ editing, setEditing ] = useState(false)
 
+	useEffect(() =>{
+		if (localStorage.getItem('clients') === null){
+			setClients(clientsData)
+		  localStorage.setItem('clients', JSON.stringify(clientsData))
+		} else {
+			setClients(JSON.parse(localStorage.getItem('clients') || '[]'))
+		}
+	  },[])
+
 	const addClient = client => {
 		client.id = clients.length + 1
 		setClients([ ...clients, client ])
+		localStorage.setItem('clients', JSON.stringify([ ...clients, client ]))
 	}
 
 	const deleteClient = id => {
 		setEditing(false)
 
 		setClients(clients.filter(client => client.id !== id))
+		localStorage.setItem('clients', JSON.stringify(clients.filter(client => client.id !== id)))
 	}
 
 	const updateClient = (id, updatedClient) => {
 		setEditing(false)
 
 		setClients(clients.map(client => (client.id === id ? updatedClient : client)))
+		localStorage.setItem('clients', JSON.stringify(clients.map(client => (client.id === id ? updatedClient : client))))
 	}
 
 	const editRow = client => {
