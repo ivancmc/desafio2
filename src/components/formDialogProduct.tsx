@@ -23,7 +23,7 @@ export default function FormDialogProduct(props:any) {
         marginRight: theme.spacing(1),
       },
       fab: {
-        position: 'absolute',
+        position: 'fixed',
         bottom: theme.spacing(2),
         right: theme.spacing(2),
       },

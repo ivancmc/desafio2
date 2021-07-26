@@ -7,13 +7,15 @@ export default createGlobalStyle`
    font-family: 'Roboto', sans-serif;
  }
 
- html{
-  background-color: slategrey;
-  font-color: white;
- }
+.MuiBox-root{
+  margin-top: 30px;
+}
+
+.cartIcon{
+  display: grid;
+}
 
 footer{
-  color: white;
   text-align: center;
   margin-top: 30px;
 }

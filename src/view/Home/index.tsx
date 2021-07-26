@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
-import { Container } from './style';
+// import { Container } from './style';
 
 import { store } from '../../store.js';
 
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import { makeStyles, withStyles, createStyles, Theme } from '@material-ui/core/styles';
 import FloatingAddProductButton from '../../components/formDialogProduct';
+import Badge from '@material-ui/core/Badge';
 import Header from '../../components/header';
-
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 export interface IProduct{
   id: number;
   photo: string;
@@ -47,31 +52,61 @@ const Home: React.FC = () => {
         '& > *': {
           margin: theme.spacing(1),
         },
+        flexGrow: 1,
+      },
+      paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
       },
     }),
   );
 
+  const StyledBadge = withStyles((theme: Theme) =>
+    createStyles({
+      badge: {
+        right: -3,
+        top: 13,
+        border: `2px solid ${theme.palette.background.paper}`,
+        padding: '0 4px',
+      },
+    }),
+  )(Badge);
+
   const classes = useStyles();
 
   return(
-    <>
-      <Header cart={cart} />
-      <Container>
-        <section>
+    <>      
+      <div className={classes.root}>
+        <div className="cartIcon">
+          <IconButton aria-label="cart">
+            <StyledBadge badgeContent={cart.length} color="secondary">
+              <ShoppingCartIcon />
+            </StyledBadge>
+          </IconButton>
+        </div>
+        <Grid container spacing={2}>
           { products.map( (prod, index) => (
-            <div className="product-content" key={prod.id}>
-              <img src={prod.photo} alt="Imagem do produto" width="200" height="auto" />
-              <h4>{prod.name}</h4>
-              <span>{prod.description}</span>
-              <h5>R$ {prod.price}</h5>
-              {/* <button onClick={ () => handleCart(index)}> Adicionar ao carrinho</button> */}
-              <div className={classes.root} onClick={ () => handleCart(index)}>
-                <Button variant="contained">Adicionar ao carrinho</Button>
-              </div>
-            </div>
+            <Grid item xs={2} key={prod.id}>
+              <Paper className={classes.paper}>
+                <img src={prod.photo} alt="Imagem do produto" width="150" height="auto" />
+                <Typography variant="h6" gutterBottom>
+                  {prod.name}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  {prod.description}
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  R$ {prod.price}
+                </Typography>
+                <IconButton color="primary" aria-label="add to shopping cart" onClick={ () => handleCart(index)}>
+                  <AddShoppingCartIcon />
+                </IconButton>
+              </Paper>
+            </Grid>
           ))}
-        </section>
-      </Container>
+        </Grid>
+      </div>
       <FloatingAddProductButton addProduct={addProduct} />
     </>
   );

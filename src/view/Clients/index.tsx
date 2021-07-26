@@ -1,10 +1,13 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState,  } from 'react';
 import AddClientForm from './AddClientForm';
 import EditClientForm from './EditClientForm';
 import ClientTable from './ClientTable';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
 export default function Clients(props){
-	// Data
 	const clientsData = [
 		{ id: 1, name: 'Ivan Cardoso', address: 'Salvador-BA' }
 	]
@@ -13,12 +16,10 @@ export default function Clients(props){
 
 	const initialFormState = { id: null, name: '', address: '' }
 
-	// Setting state
 	const [ clients, setClients ] = useState(clientsData)
 	const [ currentClient, setCurrentClient ] = useState(initialFormState)
 	const [ editing, setEditing ] = useState(false)
 
-	// CRUD operations
 	const addClient = client => {
 		client.id = clients.length + 1
 		setClients([ ...clients, client ])
@@ -42,33 +43,48 @@ export default function Clients(props){
 		setCurrentClient({ id: client.id, name: client.name, address: client.address })
 	}
 
+	const useStyles = makeStyles({
+		root: {
+			width: '100%',
+			display: 'flex',
+			flexDirection: 'column',
+			textAlign: 'center',
+		},
+	});
+
+	const classes = useStyles();
+
 	return (
-		<div className="container">
-			<h1>Cadastro de clientes</h1>
-			<div className="flex-row">
-				<div className="flex-large">
-					{editing ? (
-						<Fragment>
-							<h2>Editar cliente</h2>
-							<EditClientForm
-								editing={editing}
-								setEditing={setEditing}
-								currentClient={currentClient}
-								updateClient={updateClient}
-							/>
-						</Fragment>
-					) : (
-						<Fragment>
-							<h2>Adicionar cliente</h2>
-							<AddClientForm addClient={addClient} />
-						</Fragment>
-					)}
-				</div>
-				<div className="flex-large">
-					<h2>Ver clientes</h2>
-					<ClientTable clients={clients} editRow={editRow} deleteClient={deleteClient} />
-				</div>
+		<>
+			<div className={classes.root}>
+				{editing ? (
+					<>
+						<Typography variant="h4" gutterBottom>
+						Atualizar cliente
+						</Typography>
+						<EditClientForm
+							editing={editing}
+							setEditing={setEditing}
+							currentClient={currentClient}
+							updateClient={updateClient}
+						/>
+					</>
+				) : (
+					<>
+						<Typography variant="h4" gutterBottom>
+						Adicionar cliente
+						</Typography>
+						<AddClientForm addClient={addClient} />
+					</>
+				)}
 			</div>
-		</div>
+			<br/>
+			<div className={classes.root}>
+				<Typography variant="h4" gutterBottom>
+						Clientes
+				</Typography>
+				<ClientTable clients={clients} editRow={editRow} deleteClient={deleteClient} />
+			</div>
+		</>
 	)
 }
