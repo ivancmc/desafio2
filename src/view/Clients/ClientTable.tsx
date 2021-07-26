@@ -16,7 +16,6 @@ const ClientTable = props => {
   const useStyles = makeStyles({
     table: {
       minWidth: 350,
-      maxWidth: 500,
     },
   });
   
@@ -24,7 +23,7 @@ const ClientTable = props => {
   
   return (
     <TableContainer component={Paper}>
-        <Table size="small" aria-label="a dense table">
+        <Table className={classes.table} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>
