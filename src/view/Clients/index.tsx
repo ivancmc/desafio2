@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AddClientForm from './AddClientForm';
 import EditClientForm from './EditClientForm';
 import ClientTable from './ClientTable';
@@ -6,26 +6,15 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 export default function Clients(props){
-	const clientsData = [
+	const clientsData = JSON.parse(localStorage.getItem('clients')) ? JSON.parse(localStorage.getItem('clients')) : [
 		{ id: 1, name: 'Ivan Cardoso', address: 'Salvador-BA' }
 	]
-
-	console.log(props)
 
 	const initialFormState = { id: null, name: '', address: '' }
 
 	const [ clients, setClients ] = useState(clientsData)
 	const [ currentClient, setCurrentClient ] = useState(initialFormState)
 	const [ editing, setEditing ] = useState(false)
-
-	useEffect(() =>{
-		if (localStorage.getItem('clients') === null){
-			setClients(clientsData)
-		  	localStorage.setItem('clients', JSON.stringify(clientsData))
-		} else {
-			setClients(JSON.parse(localStorage.getItem('clients') || '[]'))
-		}
-	},[])
 
 	const addClient = client => {
 		client.id = clients.length + 1
